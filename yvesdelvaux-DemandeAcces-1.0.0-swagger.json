@@ -1,0 +1,362 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "Gestion des demandes d'accès Pro Connect",
+    "description" : "Cette API est utilisée par les Portails de Service Public pour que leurs utilisateurs puissent demander des habilitations sur leurs services."
+  },
+  "security" : [ {
+    "application" : [ "createDemande", "getDemande", "updateDemande" ]
+  } ],
+  "servers" : [ {
+    "url" : "/acces/v1"
+  }, {
+    "url" : "https://api. aife.economie.gouv.fr/proconnect/acces/v1"
+  } ],
+  "tags" : [ {
+    "name" : "Gestion des demandes"
+  }, {
+    "name" : "Vérification de la validité de la demande"
+  } ],
+  "paths" : {
+    "/demande" : {
+      "post" : {
+        "summary" : "Création d'une demande d'accès",
+        "description" : "Cette ressource est appelée par le PSP pour créer une demande d'accès dans Pro Connect.",
+        "parameters" : [ {
+          "name" : "X-Correlation-ID",
+          "description" : "Identifiant de corrélation des traces",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Requête de la création d'une demande d'accès.",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/demande"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Création de la demande OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "description" : "Réponse à la demande d'accès. Si l'utilisateur est un demandeur principal, il est redirigé vers la page Pro Connect pour finaliser son habilitation.",
+                  "properties" : {
+                    "idDemandeProConnect" : {
+                      "type" : "string",
+                      "format" : "uuid",
+                      "description" : "Identifiant de la demande dans Pro Connect. Nécessaire pour la consulter."
+                    },
+                    "urlPageProConnect" : {
+                      "type" : "string",
+                      "format" : "url",
+                      "description" : "URL pour rediriger l'utilisateur vers la page Pro Connect si c'est un habilitateur principal."
+                    },
+                    "isHabilitateurPrincipal" : {
+                      "type" : "boolean",
+                      "default" : false,
+                      "description" : "Vrai si l'utilisateur est un des habilitateurs principaux de l'entreprise."
+                    }
+                  },
+                  "required" : [ "idDemandeProConnect" ]
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Retour de l'API en cas d'erreur.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/erreur"
+                }
+              }
+            }
+          }
+        },
+        "tags" : [ "Gestion des demandes" ]
+      }
+    },
+    "/demande/{id}" : {
+      "get" : {
+        "summary" : "Consultation d'une demande d'accès",
+        "description" : "Cette méthode est appelée pour consulter une demande Pro Connect, ainsi que son statut.",
+        "parameters" : [ {
+          "name" : "X-Correlation-ID",
+          "description" : "Identifiant de corrélation des traces",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identifiant de la demande pro connect",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Demande trouvée et valorisée.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "demande" : {
+                      "$ref" : "#/components/schemas/demande"
+                    },
+                    "statut" : {
+                      "$ref" : "#/components/schemas/statut"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Retour de l'API en cas d'erreur.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/erreur"
+                }
+              }
+            }
+          }
+        },
+        "tags" : [ "Gestion des demandes" ]
+      },
+      "put" : {
+        "summary" : "Modification d'une demande",
+        "description" : "\"Cette méthode est appelée pour mettre à jour la demande avec son statut : accepté ou rejeté.\"",
+        "parameters" : [ {
+          "name" : "X-Correlation-ID",
+          "description" : "Identifiant de corrélation des traces",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identifiant de la demande pro connect",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Requête de la création d'une demande d'accès.",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/statut"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Demande modifiée avec succès."
+          },
+          "default" : {
+            "description" : "Retour de l'API en cas d'erreur.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/erreur"
+                }
+              }
+            }
+          }
+        },
+        "tags" : [ "Gestion des demandes" ]
+      }
+    },
+    "/demande/verification/{id}" : {
+      "get" : {
+        "summary" : "Vérification de la validité d'une habilitation.",
+        "description" : "Cette ressource permet de vérifier que pour un identifiant de demande, celle-ci est toujours valide. Si elle concerne un habilitateur principal, la vérification porte aussi sur sa présence dans le répertoire SIRENE.",
+        "parameters" : [ {
+          "name" : "X-Correlation-ID",
+          "description" : "Identifiant de corrélation des traces",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Identifiant de la demande pro connect",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Demande trouvée et valide.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "Vrai si la demande est toujours valide, fausse sinon."
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Retour de l'API en cas d'erreur.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/erreur"
+                }
+              }
+            }
+          }
+        },
+        "tags" : [ "Vérification de la validité de la demande" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "statut" : {
+        "description" : "Statut d'une demande",
+        "type" : "string",
+        "enum" : [ "ACCEPTED", "REJECTED", "ON_HOLD" ]
+      },
+      "demande" : {
+        "type" : "object",
+        "required" : [ "identification", "utilisateur", "habilitation", "onlyHabilitateurPrincipal" ],
+        "properties" : {
+          "utilisateur" : {
+            "description" : "Utilisateur à habiliter. Les données à fournir sont a minima le nom, le prénom et son adresse mail.",
+            "$ref" : "#/components/schemas/personne"
+          },
+          "habilitation" : {
+            "description" : "Habilitations sollicités pour l'utilisateur sur le PSP.",
+            "$ref" : "#/components/schemas/habilitation"
+          },
+          "onlyHabilitateurPrincipal" : {
+            "type" : "boolean",
+            "default" : false,
+            "description" : "A mettre à vrai si le PSP ne souhaite habiliter que des utilisateurs principaux."
+          }
+        }
+      },
+      "personne" : {
+        "type" : "object",
+        "description" : "Objet décrivant une personne dans le contexte Pro Connect",
+        "properties" : {
+          "nom" : {
+            "type" : "string",
+            "description" : "Nom de la personne"
+          },
+          "prenom" : {
+            "type" : "string",
+            "description" : "prénom de la personne"
+          },
+          "mail" : {
+            "type" : "string",
+            "format" : "email",
+            "description" : "Email de la personne"
+          },
+          "siren" : {
+            "type" : "string",
+            "description" : "SIREN de l'organisation de l'utilisateur."
+          }
+        },
+        "required" : [ "nom", "prenom", "mail", "siren" ]
+      },
+      "habilitation" : {
+        "type" : "object",
+        "description" : "Détail de l'habilitation.",
+        "properties" : {
+          "idDemande" : {
+            "type" : "string",
+            "format" : "uuid",
+            "description" : "Identifiant de la demande du point de vue du PSP."
+          },
+          "idPSP" : {
+            "type" : "string",
+            "format" : "uuid",
+            "description" : "Identifiant du PSP connu par Pro Connect et qui permet de l'identifier. Cet identifiant est fourni par Pro Connect lors de l'enrôlement du PSP."
+          },
+          "portail" : {
+            "type" : "string",
+            "description" : "Nom du portail pour lequel l'habilitation est sollicité. Cette donnée est utilisée pour l'affichage de la demande à l'habilitateur principal."
+          },
+          "profils" : {
+            "type" : "array",
+            "description" : "Liste des profils possibles pour habiliter l'utilisateur sur le PSP.",
+            "example" : [ "expert comptable", "gestionnaire" ],
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "required" : [ "idDemande", "idPSP", "portail" ]
+      },
+      "erreur" : {
+        "description" : "Objet décrivant les erreurs Pro Connect. Le format est calqué sur celui de PISTE pour faciliter la gestion des erreurs par les partenaires.",
+        "type" : "object",
+        "properties" : {
+          "errorLabel" : {
+            "description" : "Description courte de l'erreur.",
+            "type" : "string"
+          },
+          "errorDescription" : {
+            "description" : "Description longue de l'erreur, compréhensible par un humain.",
+            "type" : "string"
+          },
+          "errorUri" : {
+            "description" : "URL vers une description plus prècise de l'erreur.",
+            "type" : "string",
+            "format" : "url"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "application" : {
+        "type" : "oauth2",
+        "flows" : {
+          "clientCredentials" : {
+            "tokenUrl" : "https://oauth.aife.economie.gouv.fr/api/oauth/token/api/oauth/token",
+            "scopes" : {
+              "createDemande:demande" : "crée une demande d'habilitation",
+              "updateDemande:demande" : "mets à jour une demande d'habilitation (pour la valider)",
+              "getDemande:demande" : "lire une demande d'habilitation"
+            }
+          }
+        }
+      }
+    }
+  }
+}
