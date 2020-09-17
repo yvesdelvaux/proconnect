@@ -1,0 +1,658 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Contractualisation",
+        "version": "1.0.0",
+        "description": "Cette API reçoit les données de Signup pour les contrats entre la DGFiP et les fournisseurs de service.",
+        "contact": {
+            "name": "DGFiP",
+            "url": "https://api.impots.gouv.fr",
+            "email": "bureau.capusagers-apimanagement@dgfip.finances.gouv.fr"
+        }
+    },
+    "servers": [
+        {
+            "url": "/v1/contrat",
+            "description": "Racine des ressources de l'API de contractualisation."
+        }
+    ],
+    "paths": {
+        "/sandbox/{identifiant}": {
+            "summary": "Formulaire SandBox de SignUp",
+            "description": "Ce formulaire est renseigné par le représentant d'un organisme devant accéder à des informations de la DGFiP via des API.\n\nLe formulaire de SandBox initie le processus avec notamment le renseignement des informations liées au traitement et aux données qui lui sont nécessaires.",
+            "put": {
+                "requestBody": {
+                    "description": "Formulaire d'ouverture du bac-à-sable",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/sandbox"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Modification OK"
+                    }
+                },
+                "operationId": "updateContratSandbox",
+                "summary": "Mise à jour du formulaire bac-à-sable",
+                "description": "Reçoit les données du formulaire Signup pour la mise à jour de l'ouverture du bac-à-sable."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "Formulaire d'ouverture du bac-à-sable",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/sandbox"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Création OK"
+                    }
+                },
+                "operationId": "setContratSandbox",
+                "summary": "Création du formulaire bac-à-sable",
+                "description": "Reçoit les données du formulaire Signup pour l'ouverture du bac-à-sable."
+            },
+            "delete": {
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Suppression Acceptée"
+                    }
+                },
+                "operationId": "removeContratSandbox",
+                "summary": "Suppression d'une souscription SignUp bac-à-sable",
+                "description": "Reçoit les données du formulaire Signup pour la suppression d'une souscription via SignUp."
+            }
+        },
+        "/production/{identifiant}": {
+            "summary": "Formulaire de Production SignUp",
+            "description": "Ce formulaire est renseigné par le représentant d'un organisme devant accéder à des informations de la DGFiP via des API.\n\nLe formulaire de production concrétise la fin du processus avec notamment le renseignement des informations liées au RGPD et aux informations de sécurité.",
+            "put": {
+                "requestBody": {
+                    "description": "Formulaire d'ouverture à la production",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/production"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Modification OK (pas de retour de données)"
+                    }
+                },
+                "operationId": "updateContratProduction",
+                "summary": "Mise à jour du formulaire de production SignUp",
+                "description": "Reçoit la mise à jour des données du formulaire Signup pour l'ouverture en production."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "Formulaire d'ouverture à la production",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/production"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Création OK (pas de retour de données)"
+                    }
+                },
+                "operationId": "setContratProduction",
+                "summary": "Création de la souscription de production SignUp",
+                "description": "Reçoit les données du formulaire Signup pour l'ouverture en production."
+            },
+            "delete": {
+                "tags": [
+                    "Contrats"
+                ],
+                "parameters": [
+                    {
+                        "name": "identifiant",
+                        "description": "identifiant du formulaire signup",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Suppression acceptée"
+                    }
+                },
+                "operationId": "removeContratProduction",
+                "summary": "Suppression d'une souscription production SignUp",
+                "description": "Reçoit la mise à jour des données du formulaire Signup pour la suppression de la souscription SignUp."
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "sandbox": {
+                "title": "Description du formulaire bac-à-sable",
+                "required": [
+                    "organisation",
+                    "demande",
+                    "casUsage",
+                    "datas",
+                    "responsableTechnique",
+                    "traitement",
+                    "attestationCGU"
+                ],
+                "type": "object",
+                "properties": {
+                    "identifiantSandboxOld": {
+                        "description": "Dans le cas d'un avenant, identifiant de la demande initiale",
+                        "type": "string"
+                    },
+                    "organisation": {
+                        "description": "Organisation effectuant la demande",
+                        "required": [
+                            "libelle",
+                            "adresse"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "libelle": {
+                                "description": "Nom ou dénomination de l'organisation",
+                                "type": "string"
+                            },
+                            "adresse": {
+                                "$ref": "#/components/schemas/adresse"
+                            }
+                        }
+                    },
+                    "demande": {
+                        "$ref": "#/components/schemas/demande"
+                    },
+                    "casUsage": {
+                        "description": "Cas d'usage nécessitant l'utilisation de l'API à conventionner",
+                        "required": [
+                            "libelle",
+                            "detail"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "libelle": {
+                                "description": "Nom du cas d'usage",
+                                "type": "string"
+                            },
+                            "detail": {
+                                "description": "Description du cas d'usage",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "datas": {
+                        "description": "liste des API que le souscripteur souhaite accéder avec leurs ressources et restrictions.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/api"
+                        }
+                    },
+                    "responsableTechnique": {
+                        "$ref": "#/components/schemas/personne"
+                    },
+                    "traitement": {
+                        "description": "Détails relatifs aux traitements",
+                        "required": [
+                            "quota"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "teleservice": {
+                                "description": "Identifiant du téléservice du partenaire",
+                                "type": "string"
+                            },
+                            "quota": {
+                                "description": "Quota alloué au partenaire pour l'appel à l'API",
+                                "required": [
+                                    "valeur",
+                                    "velocite"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "valeur": {
+                                        "format": "int64",
+                                        "description": "valeur du quota",
+                                        "type": "number"
+                                    },
+                                    "velocite": {
+                                        "description": "véolicité du quota",
+                                        "enum": [
+                                            "appels/s",
+                                            "appels/min",
+                                            "appels/h"
+                                        ],
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "attestationCGU": {
+                        "description": "Validation des CGU bac-à-sable",
+                        "type": "boolean"
+                    },
+                    "cadreJuridique": {
+                        "$ref": "#/components/schemas/cadreJuridique",
+                        "description": "Cadre Juridique du demandeur pour justifier son accès aux API de la DGFiP.\nLe cadre juridique n'est pas obligatoire pour le formulaire SandBox."
+                    }
+                }
+            },
+            "api": {
+                "title": "Description d'une API",
+                "required": [
+                    "nom",
+                    "ressources"
+                ],
+                "type": "object",
+                "properties": {
+                    "nom": {
+                        "description": "Nom de l'API",
+                        "type": "string"
+                    },
+                    "ressources": {
+                        "description": "Liste des ressources de l'API",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ressource"
+                        }
+                    }
+                }
+            },
+            "demande": {
+                "description": "Métadonnées des formulaires",
+                "required": [
+                    "demandeur",
+                    "valideur",
+                    "dateCreation",
+                    "dateSoumission",
+                    "dateValidation"
+                ],
+                "type": "object",
+                "properties": {
+                    "demandeur": {
+                        "$ref": "#/components/schemas/personne"
+                    },
+                    "valideur": {
+                        "$ref": "#/components/schemas/personne"
+                    },
+                    "dateCreation": {
+                        "format": "date",
+                        "description": "Date de création de la demande",
+                        "type": "string"
+                    },
+                    "dateSoumission": {
+                        "format": "date",
+                        "description": "Date de soumission de la demande",
+                        "type": "string"
+                    },
+                    "dateValidation": {
+                        "format": "date",
+                        "description": "Date de validation de la demande",
+                        "type": "string"
+                    }
+                }
+            },
+            "ressource": {
+                "title": "Description d'une ressource",
+                "required": [
+                    "nom"
+                ],
+                "type": "object",
+                "properties": {
+                    "nom": {
+                        "description": "Nom de la ressource",
+                        "type": "string"
+                    },
+                    "restrictions": {
+                        "description": "Restrictions liées à la ressource",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "adresse": {
+                "title": "Description d'une adresse",
+                "required": [
+                    "ligne1",
+                    "codePostal",
+                    "ville",
+                    "pays"
+                ],
+                "type": "object",
+                "properties": {
+                    "ligne1": {
+                        "description": "Première ligne de l'adresse",
+                        "type": "string"
+                    },
+                    "ligne2": {
+                        "description": "Deuxième ligne de l'adresse",
+                        "type": "string"
+                    },
+                    "ligne3": {
+                        "description": "Troisième ligne de l'adresse",
+                        "type": "string"
+                    },
+                    "codePostal": {
+                        "description": "Code Postal de la commune",
+                        "type": "string"
+                    },
+                    "ville": {
+                        "description": "Nom de la ville",
+                        "type": "string"
+                    },
+                    "pays": {
+                        "description": "Nom du pays",
+                        "default": "FRANCE",
+                        "type": "string"
+                    }
+                }
+            },
+            "personne": {
+                "description": "Objet décrivant une personne",
+                "required": [
+                    "denomination",
+                    "mail",
+                    "telephone"
+                ],
+                "type": "object",
+                "properties": {
+                    "denomination": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/service"
+                            },
+                            {
+                                "$ref": "#/components/schemas/etatCivil"
+                            }
+                        ],
+                        "description": "Etat civil ou nom du service à contacter"
+                    },
+                    "mail": {
+                        "format": "email",
+                        "description": "Email de la personne",
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "description": "Numéro de téléphone de la personne",
+                        "type": "string"
+                    }
+                }
+            },
+            "etatCivil": {
+                "description": "Objet décrivant l'état civil d'une personne",
+                "required": [
+                    "nom",
+                    "prenom"
+                ],
+                "type": "object",
+                "properties": {
+                    "nom": {
+                        "description": "Nom de la personne",
+                        "type": "string"
+                    },
+                    "prenom": {
+                        "description": "prénom de la personne",
+                        "type": "string"
+                    }
+                }
+            },
+            "service": {
+                "description": "Nom du service",
+                "type": "string"
+            },
+            "reference": {
+                "description": "URL de référence au texte",
+                "type": "string"
+            },
+            "document": {
+                "description": "Document justificatif du cadre juridique.",
+                "required": [
+                    "fichier",
+                    "extension",
+                    "nom"
+                ],
+                "type": "object",
+                "properties": {
+                    "fichier": {
+                        "format": "byte",
+                        "description": "Binaire du document.",
+                        "type": "string"
+                    },
+                    "extension": {
+                        "description": "Format du fichier envoyé (PDF, docx, odt)",
+                        "enum": [
+                            "PDF",
+                            "DOCX",
+                            "ODT"
+                        ],
+                        "type": "string"
+                    },
+                    "nom": {
+                        "description": "Nom du fichier",
+                        "type": "string"
+                    }
+                }
+            },
+            "cadreJuridique": {
+                "description": "Cadre Juridique fournit par le demandeur pour justifier sa demande d'accès aux API de la DGFiP.",
+                "required": [
+                    "nature",
+                    "texte"
+                ],
+                "type": "object",
+                "properties": {
+                    "nature": {
+                        "description": "Nature du texte législatif (décret, loi, délibération, etc.)",
+                        "type": "string"
+                    },
+                    "texte": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/reference"
+                            },
+                            {
+                                "$ref": "#/components/schemas/document"
+                            }
+                        ],
+                        "description": "Référence ou document justifiant le cadre juridique"
+                    }
+                }
+            },
+            "production": {
+                "title": "Description du formulaire de production",
+                "required": [
+                    "identifiantSandbox",
+                    "demande",
+                    "cadreJuridique",
+                    "attestationRecette",
+                    "attestationCGU"
+                ],
+                "type": "object",
+                "properties": {
+                    "identifiantSandbox": {
+                        "description": "Identifiant du formulaire bac-à-sable",
+                        "type": "string"
+                    },
+                    "identifiantProductionOld": {
+                        "description": "Dans le cas d'un avenant, identifiant de la demande initiale",
+                        "type": "string"
+                    },
+                    "demande": {
+                        "$ref": "#/components/schemas/demande"
+                    },
+                    "cadreJuridique": {
+                        "$ref": "#/components/schemas/cadreJuridique",
+                        "description": "Cadre Juridique renseigné par le demandeur pour justifier son utilisation des API de la DGFiP.\nLe cadre juridique est obligatoire dans le formulaire de production."
+                    },
+                    "rgpd": {
+                        "description": "Données liées au traitement de données à caractère personnel",
+                        "required": [
+                            "destinataires",
+                            "responsableTraitement",
+                            "attestationRGPD",
+                            "dpd"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "destinataires": {
+                                "description": "Destinataires des données",
+                                "type": "string"
+                            },
+                            "responsableTraitement": {
+                                "$ref": "#/components/schemas/personne"
+                            },
+                            "dpd": {
+                                "$ref": "#/components/schemas/personne"
+                            },
+                            "attestationRGPD": {
+                                "description": "Validation par le souscripteur de son engagement à respecter le RGPD",
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "homologation": {
+                        "description": "Eléments liés à l'homologation",
+                        "required": [
+                            "nomAutorite",
+                            "fonctionAutorite",
+                            "date",
+                            "pv"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "nomAutorite": {
+                                "description": "Nom de l'autorité ayant réalisé l'homologation",
+                                "type": "string"
+                            },
+                            "fonctionAutorite": {
+                                "description": "Fonction de l'autorité ayant réalisé l'homologation",
+                                "type": "string"
+                            },
+                            "dateDebut": {
+                                "format": "date",
+                                "description": "Date de début de validité de l'homologation",
+                                "type": "string"
+                            },
+                            "dateFin": {
+                                "format": "date",
+                                "description": "Date de fin de validité de l'homologation",
+                                "type": "string"
+                            },
+                            "pv": {
+                                "format": "base64",
+                                "description": "Document attestant l'homologation",
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "attestationRecette": {
+                        "description": "Attestation de recette effectuée par le partenaire",
+                        "type": "boolean"
+                    },
+                    "attestationCGU": {
+                        "description": "Validation des CGU de production",
+                        "type": "boolean"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Contrats"
+        }
+    ]
+}
